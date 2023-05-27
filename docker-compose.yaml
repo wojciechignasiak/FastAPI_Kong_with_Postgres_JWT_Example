@@ -1,0 +1,101 @@
+version: '3'
+
+networks:
+  api-network:
+    name: api-network
+    driver: bridge
+
+volumes:
+  kong-postgres-volume:
+
+services:
+######################FastAPI###########################
+
+  fastapi-app:
+    container_name: fastapi-app
+    build: ./fastapi-app
+    image: ghcr.io/wojciechignasiak/fastapi-app:0.0.1
+    ports:
+      - 8080:80
+    expose:
+      - 80
+    networks:
+      - api-network
+    volumes:
+      - ./fastapi-app:/usr/src/fastapi-app/
+    depends_on:
+      - kong
+
+######################FastAPI###########################
+
+########################KONG############################
+
+  kong-database:
+    image: postgres:15.1-alpine
+    container_name: kong-database
+    ports:
+      - 5431:5432
+    expose:
+      - 5431
+    environment:
+      - POSTGRES_USER=${KONG_POSTGRES_USER}
+      - POSTGRES_DB=${KONG_POSTGRES_DB}
+      - POSTGRES_PASSWORD=${KONG_POSTGRES_PASSWORD}
+    networks:
+      - api-network
+    restart: always
+    volumes:
+      - kong-postgres-volume:/var/lib/postgresql/data
+      - "/etc/localtime:/etc/localtime:ro"
+  
+  kong-migrations:
+    image: kong:3.1.1-alpine
+    environment:
+      - KONG_DATABASE=postgres
+      - KONG_PG_HOST=kong-database
+      - KONG_PG_PASSWORD=${KONG_POSTGRES_PASSWORD}
+      - KONG_CASSANDRA_CONTACT_POINTS=kong-database
+    command: kong migrations bootstrap
+    restart: on-failure
+    networks:
+      - api-network
+    depends_on:
+      - kong-database
+
+  kong:
+    image: kong:3.1.1-alpine
+    container_name: kong
+    environment:
+      - LC_CTYPE=en_US.UTF-8
+      - LC_ALL=en_US.UTF-8
+      - KONG_DATABASE=postgres
+      - KONG_PG_HOST=kong-database
+      - KONG_PG_USER=${KONG_POSTGRES_USER}
+      - KONG_PG_PASSWORD=${KONG_POSTGRES_PASSWORD}
+      - KONG_CASSANDRA_CONTACT_POINTS=kong-database
+      - KONG_PROXY_ACCESS_LOG=/dev/stdout
+      - KONG_ADMIN_ACCESS_LOG=/dev/stdout
+      - KONG_PROXY_ERROR_LOG=/dev/stderr
+      - KONG_ADMIN_ERROR_LOG=/dev/stderr
+      - KONG_ADMIN_LISTEN=0.0.0.0:8001, 0.0.0.0:8444 ssl
+    restart: always
+    ports:
+      - 8000:8000
+      - 8443:8443
+      - 8001:8001
+      - 8444:8444
+    expose:
+      - 8000
+      - 8001
+    links:
+      - kong-database:kong-database
+    networks:
+      - api-network
+    depends_on:
+      - kong-database
+      - kong-migrations
+    volumes:
+      - "/etc/localtime:/etc/localtime:ro"
+      - "/etc/timezone:/etc/timezone:ro"
+
+########################KONG############################
