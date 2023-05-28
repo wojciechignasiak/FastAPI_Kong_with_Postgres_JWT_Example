@@ -9,7 +9,8 @@ from app.routers import (
     revoke_current_kong_consumer_jwt_using_id,
     revoke_current_kong_consumer_jwt_using_username,
     revoke_all_kong_consumer_jwt_using_id,
-    revoke_all_kong_consumer_jwt_using_username
+    revoke_all_kong_consumer_jwt_using_username,
+    register_fastapi_app_service_in_kong
 )
 
 def create_application() -> FastAPI:
@@ -25,7 +26,7 @@ def create_application() -> FastAPI:
     application.include_router(revoke_current_kong_consumer_jwt_using_username.router, prefix="/kong-manager", tags=["kong-manager"])
     application.include_router(revoke_all_kong_consumer_jwt_using_id.router, prefix="/kong-manager", tags=["kong-manager"])
     application.include_router(revoke_all_kong_consumer_jwt_using_username.router, prefix="/kong-manager", tags=["kong-manager"])
-    
+    application.include_router(register_fastapi_app_service_in_kong.router, prefix="/kong-manager", tags=["kong-manager"])
     return application
 
 #creating a global variable for the application
