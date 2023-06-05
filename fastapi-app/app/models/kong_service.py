@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 from enum import Enum
 
-class RegisterServiceInKong(BaseModel):
+class CreateServiceInKong(BaseModel):
     service_name: str
     service_url: str
     

@@ -1,16 +1,16 @@
 import httpx
 from fastapi import HTTPException
-from app.models.kong_service import RegisterServiceInKong, ServiceInKongAttributes
+from app.models.kong_service import CreateServiceInKong, ServiceInKongAttributes
 
-async def register_fastapi_app_service_in_kong(service: RegisterServiceInKong):
+async def create_fastapi_app_service_in_kong(service: CreateServiceInKong):
     """Function to add fastapi-app service to kong.
 
 
     Args:
-        service (RegisterServiceInKong): The service to register.
+        service (CreateServiceInKong): The service to create.
 
     Returns:
-        True or False: If the service was registered.
+        json Kong response or False: If the service was created.
 
     """
     try:
@@ -20,10 +20,9 @@ async def register_fastapi_app_service_in_kong(service: RegisterServiceInKong):
         }
         async with httpx.AsyncClient() as client:
             response = await client.post(f"http://kong:8001/services", data=service_data)
-            print(response.json())
         if response.is_success:
-            return True
+            return response.json()
         else:
             return False
     except httpx.HTTPError as e:
-        raise HTTPException(status_code=500, detail=f"register_fastapi_app_service_in_kong: {e}")
+        raise HTTPException(status_code=500, detail=f"create_fastapi_app_service_in_kong: {e}")
