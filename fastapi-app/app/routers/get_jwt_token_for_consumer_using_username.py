@@ -7,7 +7,7 @@ from app.generators.generate_jwt_with_username import generate_jwt_with_username
 
 router = APIRouter()
 
-@router.get("/get_jwt_token_for_consumer_using_username")
+@router.get("/get-jwt-token-for-consumer-using-username")
 async def get_jwt_token_for_consumer_using_username_handler(consumer_username: str) -> JSONResponse:
     try:
         jwt_credential: KongJWTCredentials = await create_jwt_credential_for_consumer_using_username(kong_consumer_username = consumer_username)

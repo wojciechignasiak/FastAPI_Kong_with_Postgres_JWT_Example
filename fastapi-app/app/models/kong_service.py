@@ -9,7 +9,7 @@ class CreateServiceInKong(BaseModel):
         schema_extra = {
             "example": {
                 "service_name": "fastapi-app",
-                "service_url": "http://fastapi-app:80"
+                "service_url": "http://fastapi-app:80/kong-fastapi-example"
             }
         }
 

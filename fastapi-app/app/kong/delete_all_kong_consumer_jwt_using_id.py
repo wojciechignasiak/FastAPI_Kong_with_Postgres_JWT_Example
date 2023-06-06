@@ -4,11 +4,21 @@ from app.models.kong_jwt import KongJWTCredentials
 
 
 
-async def revoke_all_kong_consumer_jwt_using_id(kong_consumer_id: str): 
-    """Function to revoke all jwts of a kong consumer
+async def delete_all_kong_consumer_jwt_using_id(kong_consumer_id: str): 
+    """Function that deletes all jwts of a kong consumer
 
     Args:
         kong_consumer_id (str): The id of the kong consumer to revoke jwts
+    
+    Raises:
+        HTTPException: 500 If the kong api returns an error
+
+    Returns:
+        bool: True if the jwts were deleted, False if the kong api returned an error or the consumer has no jwts to revoke. 
+
+    Examples:
+        >>> delete_all_kong_consumer_jwt_using_id("4f596ce5-f799-4bc7-9c54-cfc90c3eff42")
+        True
     """
     try:
         async with httpx.AsyncClient() as client:
@@ -27,4 +37,4 @@ async def revoke_all_kong_consumer_jwt_using_id(kong_consumer_id: str):
                 return False
 
     except httpx.HTTPError as e:
-        raise HTTPException(status_code=500, detail=f"revoke_all_kong_consumer_jwt_using_id: {e}")
+        raise HTTPException(status_code=500, detail=f"delete_all_kong_consumer_jwt_using_id: {e}")

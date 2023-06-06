@@ -12,6 +12,13 @@ async def create_jwt_credential_for_consumer_using_username(kong_consumer_userna
 
     Returns:
         created_jwt_credential (KongJWTCredentials): The created jwt credential.
+
+    Raises:
+        HTTPException: 500 if fail.
+        
+    Example:
+        >>> create_jwt_credential_for_consumer_using_username(kong_consumer_username="my_username")
+        json
     """
     try:
         async with httpx.AsyncClient() as client:
@@ -19,5 +26,7 @@ async def create_jwt_credential_for_consumer_using_username(kong_consumer_userna
         if response.is_success:
             created_jwt_credential: KongJWTCredentials = KongJWTCredentials(**response.json())
             return created_jwt_credential
+        else:
+            raise HTTPException(status_code=500, detail=f"create_jwt_credential_for_consumer_using_username: {response.text}")
     except httpx.HTTPError as e:
         raise HTTPException(status_code=500, detail=f"create_jwt_credential_for_consumer_using_username: {e}")

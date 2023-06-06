@@ -7,7 +7,7 @@ from app.decoders.jwt_payload_decoder import jwt_payload_decoder
 
 router = APIRouter()
 
-@router.get("/fastapi_bearer_authorization_and_jwt_payload_decoding")
+@router.get("/fastapi-bearer-authorization-and-jwt-payload-decoding")
 async def fastapi_bearer_authorization_and_jwt_payload_decoding_handler(token: str = Depends(HTTPBearer())) -> JSONResponse:
     try:
         decoded_payload = await jwt_payload_decoder(token)

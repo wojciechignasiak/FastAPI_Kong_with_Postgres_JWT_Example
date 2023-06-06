@@ -11,6 +11,14 @@ async def create_kong_consumer(kong_consumer_to_be_created: CreateKongConsumer):
     Returns:
         KongConsumer model with the created consumer
         model location: app/models/kong_consumer.py
+    
+    Raises:
+        HTTPException: 500 if there is an error creating the consumer
+        HTTPException: 409 if the consumer already exists
+        
+    Examples:
+        >>> create_kong_consumer(CreateKongConsumer(username="XXXX", custom_id="test"))
+        KongConsumer(username='XXXX', custom_id='test')
     """
     try:
         kong_consumer = {
@@ -30,7 +38,8 @@ async def create_kong_consumer(kong_consumer_to_be_created: CreateKongConsumer):
         
         if response.status_code == 409:
             raise HTTPException(status_code=409, detail="create_kong_consumer: Kong consumer already exists")
-        
+        else:
+            raise HTTPException(status_code=500, detail=f"create_kong_consumer: {response.text}")
 
     except httpx.HTTPError as e:
         raise HTTPException(status_code=500, detail=f"create_kong_consumer: {e}")
