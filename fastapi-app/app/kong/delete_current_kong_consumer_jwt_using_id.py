@@ -25,6 +25,8 @@ async def delete_current_kong_consumer_jwt_using_id(kong_consumer_id: str, kong_
             )
             if response.status_code == 204:
                 return True
-
+            else:
+                raise HTTPException(status_code=500, detail=f"delete_current_kong_consumer_jwt_using_id: {response.text}")
+            
     except httpx.HTTPError as e:
         raise HTTPException(status_code=500, detail=f"delete_current_kong_consumer_jwt_using_id: {e}")

@@ -22,6 +22,6 @@ async def delete_route_from_kong_using_id_or_name(route_id_or_name_to_delete: st
             if response.status_code == 204:
                 return True
             else:
-                return False
+                raise HTTPException(status_code=500, detail=f"delete_route_from_kong_using_id_or_name: {response.text}")
     except httpx.HTTPError as e:
         raise HTTPException(status_code=500, detail=f"delete_route_from_kong_using_id_or_name: {e}")

@@ -1,6 +1,5 @@
 from fastapi import APIRouter, HTTPException, status
 from fastapi.responses import JSONResponse
-from fastapi.encoders import jsonable_encoder
 from app.models.kong_jwt import KongJWTCredentials
 from app.kong.create_jwt_credential_for_consumer_using_username import create_jwt_credential_for_consumer_using_username
 from app.generators.generate_jwt_with_username import generate_jwt_with_username

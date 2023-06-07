@@ -33,7 +33,7 @@ async def create_kong_consumer(kong_consumer_to_be_created: CreateKongConsumer):
             )
         
         if response.status_code == 201:
-            created_consumer = KongConsumer.parse_raw(response.text)
+            created_consumer = KongConsumer.parse_obj(response.json())
             return created_consumer
         
         if response.status_code == 409:

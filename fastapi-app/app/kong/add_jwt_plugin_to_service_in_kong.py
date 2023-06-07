@@ -1,6 +1,6 @@
 import httpx
 from fastapi import HTTPException
-from app.models.kong_plugin import KongPlugin, KongPluginAttributes
+from app.models.kong_plugin import KongPlugin, KongPluginAttributes, PluginInService
 
 
 async def add_jwt_plugin_to_service_in_kong(kong_plugin_and_service: KongPlugin):
@@ -29,8 +29,9 @@ async def add_jwt_plugin_to_service_in_kong(kong_plugin_and_service: KongPlugin)
             response = await client.post(
                 f"http://kong:8001/services/{kong_plugin_and_service.service_name_or_id}/plugins", data=plugin_data
             )
-            if response.is_success:                
-                return response.json()
+            if response.is_success:
+                response: PluginInService = PluginInService.parse_obj(response.json())       
+                return response
             else:
                 raise HTTPException(status_code=500, detail=f"add_jwt_plugin_to_service_in_kong: {response.text}")
     except httpx.HTTPError as e:

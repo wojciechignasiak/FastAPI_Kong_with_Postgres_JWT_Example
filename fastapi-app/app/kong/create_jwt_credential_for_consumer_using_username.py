@@ -24,7 +24,7 @@ async def create_jwt_credential_for_consumer_using_username(kong_consumer_userna
         async with httpx.AsyncClient() as client:
             response = await client.post(f"http://kong:8001/consumers/{kong_consumer_username}/jwt")
         if response.is_success:
-            created_jwt_credential: KongJWTCredentials = KongJWTCredentials(**response.json())
+            created_jwt_credential: KongJWTCredentials = KongJWTCredentials.parse_obj(response.json())
             return created_jwt_credential
         else:
             raise HTTPException(status_code=500, detail=f"create_jwt_credential_for_consumer_using_username: {response.text}")

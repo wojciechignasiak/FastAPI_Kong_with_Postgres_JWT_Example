@@ -1,6 +1,6 @@
 import httpx
 from fastapi import HTTPException
-from app.models.kong_plugin import KongPluginClaim, KongPluginAttributes
+from app.models.kong_plugin import KongPluginClaim, KongPluginAttributes, PluginInService
 
 
 async def add_exp_claim_to_verify_in_jwt(kong_plugin_id_and_claim: KongPluginClaim):
@@ -29,8 +29,9 @@ async def add_exp_claim_to_verify_in_jwt(kong_plugin_id_and_claim: KongPluginCla
             response = await client.patch(
                 f"http://kong:8001/plugins/{kong_plugin_id_and_claim.plugin_id}", data=claim_data 
             )
-            if response.is_success:                
-                return response.json()
+            if response.is_success:
+                response: PluginInService = PluginInService.parse_obj(response.json())
+                return response
             else:
                 raise HTTPException(status_code=500, detail=f"add_exp_claim_to_verify_in_jwt: {response.text}")
     except httpx.HTTPError as e:

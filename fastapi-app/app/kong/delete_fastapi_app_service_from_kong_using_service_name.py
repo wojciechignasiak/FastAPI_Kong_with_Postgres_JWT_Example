@@ -25,6 +25,6 @@ async def delete_fastapi_app_service_from_kong_using_service_name(service_name: 
         if response.is_success:
             return True
         else:
-            return False
+            raise HTTPException(status_code=500, detail=f"delete_fastapi_app_service_from_kong_using_service_name: {response.text}")
     except httpx.HTTPError as e:
         raise HTTPException(status_code=500, detail=f"delete_fastapi_app_service_from_kong_using_service_name: {e}")

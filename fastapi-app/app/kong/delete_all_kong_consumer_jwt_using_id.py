@@ -28,7 +28,7 @@ async def delete_all_kong_consumer_jwt_using_id(kong_consumer_id: str):
             if response.status_code == 200 and bool(response.json()['data']):
                 list_of_jwt = response.json()['data']
                 for jwt in list_of_jwt:
-                    jwt_object: KongJWTCredentials = KongJWTCredentials(**jwt)
+                    jwt_object: KongJWTCredentials = KongJWTCredentials.parse_obj(jwt)
                     response = await client.delete(
                         f"http://kong:8001/consumers/{kong_consumer_id}/jwt/{jwt_object.id}"
                     )

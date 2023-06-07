@@ -1,6 +1,6 @@
 import httpx
 from fastapi import HTTPException
-from app.models.kong_route import CreateRouteForServiceInKong, RouteForServiceInKongAttributes
+from app.models.kong_route import CreateRouteForServiceInKong, RouteForServiceInKongAttributes, RouteForService
 
 async def create_route_to_fastapi_app_service_in_kong(route: CreateRouteForServiceInKong):
     """Function that adds route fastapi-app service in kong.
@@ -56,7 +56,8 @@ async def create_route_to_fastapi_app_service_in_kong(route: CreateRouteForServi
         async with httpx.AsyncClient() as client:
             response = await client.post(f"http://kong:8001/services/{route.service_name}/routes", data=route_data)
         if response.is_success:
-            return response.json()
+            response: RouteForService = RouteForService.parse_obj(response.json())
+            return response
         else:
             raise HTTPException(status_code=500, detail=f"create_route_to_fastapi_app_service_in_kong: {response.text}")
     except httpx.HTTPError as e:
