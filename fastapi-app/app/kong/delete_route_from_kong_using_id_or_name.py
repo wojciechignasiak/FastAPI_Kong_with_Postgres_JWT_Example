@@ -2,17 +2,20 @@ import httpx
 from fastapi import HTTPException
 
 async def delete_route_from_kong_using_id_or_name(route_id_or_name_to_delete: str):
-    """Function to delete a route
+    """
+    Asynchronous function to delete a route from Kong using its id or name.
+
+    The function sends a DELETE request to the Kong API to remove the specified route.
+    If successful, it returns True. In case of an HTTP response error or request issues, it raises an `HTTPException`.
 
     Args:
-        delete_route_from_kong_using_id_or_name (str): The id or name of the route to be deleted
-
-    Raises:
-        HTTPException: 500
+        route_id_or_name_to_delete (str): Identifier or name of the route to be deleted.
 
     Returns:
-        >>> delete_route_from_kong_using_id_or_name("route_id_or_name")
-        True
+        bool: True if the operation was successful and the route was deleted, False otherwise.
+
+    Raises:
+        HTTPException: If the HTTP request returns an error code or there is an issue while attempting to communicate with the Kong API.
     """
     try:
         async with httpx.AsyncClient() as client:

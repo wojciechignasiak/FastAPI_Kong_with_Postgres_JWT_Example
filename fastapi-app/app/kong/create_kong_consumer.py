@@ -3,22 +3,21 @@ from fastapi import HTTPException
 from app.models.kong_consumer import KongConsumerAttributes, CreateKongConsumer, KongConsumer
 
 async def create_kong_consumer(kong_consumer_to_be_created: CreateKongConsumer):
-    """Function to create a kong consumer
+    """
+    Asynchronous function to create a Kong consumer.
+
+    The function sends a POST request to the Kong API to create a new consumer with the provided username and custom id.
+    On successful creation, it returns the newly created consumer as a `KongConsumer` object.
+    In case of an HTTP response error or request issues, it raises an `HTTPException`.
 
     Args:
-        new_kong_consumer: CreateKongConsumer model
-        model location: app/models/kong_consumer.py
+        kong_consumer_to_be_created (CreateKongConsumer): Object containing the username and custom id for the new consumer.
+
     Returns:
-        KongConsumer model with the created consumer
-        model location: app/models/kong_consumer.py
-    
+        KongConsumer: Object representing the newly created consumer in Kong.
+
     Raises:
-        HTTPException: 500 if there is an error creating the consumer
-        HTTPException: 409 if the consumer already exists
-        
-    Examples:
-        >>> create_kong_consumer(CreateKongConsumer(username="XXXX", custom_id="test"))
-        KongConsumer(username='XXXX', custom_id='test')
+        HTTPException: If the HTTP request returns an error code, the consumer already exists, or there is an issue while attempting to communicate with the Kong API.
     """
     try:
         kong_consumer = {

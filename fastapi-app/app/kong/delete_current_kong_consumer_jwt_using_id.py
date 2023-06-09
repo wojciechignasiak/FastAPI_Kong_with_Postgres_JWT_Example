@@ -1,22 +1,22 @@
 import httpx
 from fastapi import HTTPException
 
-async def delete_current_kong_consumer_jwt_using_id(kong_consumer_id: str, kong_jwt_id: str): 
-    """Function to delete a current jwt of a kong consumer
+async def delete_current_kong_consumer_jwt_using_id(kong_consumer_id: str, kong_jwt_id: str):
+    """
+    Asynchronous function to delete a specific JWT (JSON Web Token) credential for a Kong consumer using its id.
+
+    The function sends a DELETE request to the Kong API to remove the JWT credential of the specified consumer with the given JWT id.
+    If successful, it returns True. In case of an HTTP response error or request issues, it raises an `HTTPException`.
 
     Args:
-        kong_consumer_id (str): The id of the kong consumer to delete jwt
-        kong_consumer_jwt_id (str): The id of current JWT credentials
-    
+        kong_consumer_id (str): Identifier of the Kong consumer for which the JWT credential is to be deleted.
+        kong_jwt_id (str): Identifier of the JWT credential to be deleted.
+
     Returns:
-        bool: True if the jwt has been deleted.
+        bool: True if the operation was successful and the JWT credential was deleted, False otherwise.
 
     Raises:
-        HTTPException: 500 if the request failed. 
-
-    Examples:
-        >>> delete_current_kong_consumer_jwt_using_id(kong_consumer_id="my_consumer_id", kong_jwt_id="my_jwt_id")
-        True
+        HTTPException: If the HTTP request returns an error code or there is an issue while attempting to communicate with the Kong API.
     """
     try:
         async with httpx.AsyncClient() as client:

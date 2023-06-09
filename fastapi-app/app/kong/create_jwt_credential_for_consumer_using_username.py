@@ -3,22 +3,21 @@ from fastapi import HTTPException
 from app.models.kong_jwt import KongJWTCredentials
 
 async def create_jwt_credential_for_consumer_using_username(kong_consumer_username: str):
-    """Function to create jwt credential for a consumer.
+    """
+    Asynchronous function to create a JWT (JSON Web Token) credential for a Kong consumer using its username.
 
-    This function will create a new jwt credential for a consumer.
+    The function sends a POST request to the Kong API to create the JWT credential for the specified consumer.
+    On success, it returns the created JWT credential as a `KongJWTCredentials` object.
+    In case of an HTTP response error or request issues, it raises an `HTTPException`.
 
     Args:
-        kong_consumer_username (str): The username of the consumer.
+        kong_consumer_username (str): Username of the Kong consumer for which the JWT credential is to be created.
 
     Returns:
-        created_jwt_credential (KongJWTCredentials): The created jwt credential.
+        KongJWTCredentials: Object representing the newly created JWT credential.
 
     Raises:
-        HTTPException: 500 if fail.
-        
-    Example:
-        >>> create_jwt_credential_for_consumer_using_username(kong_consumer_username="my_username")
-        json
+        HTTPException: If the HTTP request returns an error code or there is an issue while attempting to communicate with the Kong API.
     """
     try:
         async with httpx.AsyncClient() as client:

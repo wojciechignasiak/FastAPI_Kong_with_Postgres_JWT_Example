@@ -3,50 +3,21 @@ from fastapi import HTTPException
 from app.models.kong_route import CreateRouteForServiceInKong, RouteForServiceInKongAttributes, RouteForService
 
 async def create_route_to_fastapi_app_service_in_kong(route: CreateRouteForServiceInKong):
-    """Function that adds route fastapi-app service in kong.
+    """
+    Asynchronous function to create a route to a FastAPI application service within Kong.
 
+    The function sends a POST request to the Kong API to create the route according to the provided data.
+    On success, it returns the created route as a `RouteForService` object.
+    In case of an HTTP response error or request issues, it raises an `HTTPException`.
 
     Args:
-        route (CreateRouteForServiceInKong): The route to create.
+        route (CreateRouteForServiceInKong): Object containing the route name and paths for the new route.
 
     Returns:
-        json Kong response or False: If the route was created.
+        RouteForService: Object representing the newly created route in the service.
 
     Raises:
-        HTTPException: 500 If the route was not created.
-
-    Examples:
-        >>> create_route_to_fastapi_app_service_in_kong(CreateRouteForServiceInKong(route_name="test", service_name="fastapi-app", paths=["/test"]))
-        >>> {
-            "destinations": null,
-            "hosts": null,
-            "request_buffering": true,
-            "response_buffering": true,
-            "name": "test",
-            "headers": null,
-            "https_redirect_status_code": 426,
-            "regex_priority": 0,
-            "service": {
-                "id": "b035c05f-cb23-4cee-96bd-4a107f0970db"
-            },
-            "id": "76fea7fc-f78b-4713-8f6e-9bb2e5ce9270",
-            "tags": null,
-            "path_handling": "v0",
-            "protocols": [
-                "http",
-                "https"
-            ],
-            "preserve_host": false,
-            "created_at": 1686061678,
-            "updated_at": 1686061678,
-            "snis": null,
-            "strip_path": true,
-            "paths": [
-                "/test"
-            ],
-            "methods": null,
-            "sources": null
-            }
+        HTTPException: If the HTTP request returns an error code or there is an issue while attempting to communicate with the Kong API.
     """
     try:
         route_data = {

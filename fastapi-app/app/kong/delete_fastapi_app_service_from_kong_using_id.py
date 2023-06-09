@@ -2,26 +2,21 @@ import httpx
 from fastapi import HTTPException
 
 async def delete_fastapi_app_service_from_kong_using_id(service_id: str):
-    """Function to delete fastapi-app service from kong.
+    """
+    Asynchronous function to delete a FastAPI application service from Kong using the service's id.
 
+    The function sends a DELETE request to the Kong API to remove the specified service.
+    If successful, it returns True. If the service cannot be deleted or does not exist, it returns False.
+    In case of an HTTP response error or request issues, it raises an `HTTPException`.
 
     Args:
-        service_id: The service to delete.
+        service_id (str): Identifier of the service to be deleted.
 
     Returns:
-        True or False: If the service was deleted.
+        bool: True if the operation was successful and the service was deleted, False otherwise.
 
     Raises:
-        HTTPException: If the service was not deleted.
-        
-    Examples:
-        >>> delete_fastapi_app_service_from_kong_using_id("fb035c05f-cb23-4cee-96bd-4a107f0970db")
-        True
-        
-    Note:
-        This function is not intended to be used directly.
-        Use the `delete_fastapi_app_service_from_kong` function instead.
-
+        HTTPException: If the HTTP request returns an error code or there is an issue while attempting to communicate with the Kong API.
     """
     try:
         async with httpx.AsyncClient() as client:

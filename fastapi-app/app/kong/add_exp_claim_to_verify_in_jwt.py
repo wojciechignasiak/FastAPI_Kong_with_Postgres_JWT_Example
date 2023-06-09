@@ -4,24 +4,23 @@ from app.models.kong_plugin import KongPluginClaim, KongPluginAttributes, Plugin
 
 
 async def add_exp_claim_to_verify_in_jwt(kong_plugin_id_and_claim: KongPluginClaim):
-    """Function that add claim to jwt plugin
+    """
+    Asynchronous function to add claims to verify in JWT (JSON Web Token) within Kong service.
+
+    The function sends a PATCH request to the Kong API to update the plugin according to the provided data.
+    On success, it returns the updated plugin as a `PluginInService` object.
+    In case of an HTTP response error or request issues, it raises an `HTTPException`.
 
     Args:
-        kong_plugin_id_and_claim (KongPluginClaim): KongPluginClaim is class that contains plugin id and claim to verify
+        kong_plugin_id_and_claim (KongPluginClaim): Object containing Kong plugin identifier and claims to verify.
 
     Returns:
-        json if success, raise HTTPException if fail.
+        PluginInService: Object representing the updated plugin in the service.
 
     Raises:
-        HTTPException: 500 if fail.
-        
-    Example:
-        >>> add_exp_claim_to_verify_in_jwt(KongPluginClaim(plugin_id="xxx-xxx-xxx", claim_to_verify="exp"))
-        json
-        
+        HTTPException: If the HTTP request returns an error code or there is an issue while attempting to communicate with the Kong API.
     """
     try:
-
         claim_data = {
             KongPluginAttributes.claims_to_verify.value: kong_plugin_id_and_claim.claims_to_verify,
         } 

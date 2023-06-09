@@ -97,3 +97,71 @@ async def test_add_exp_claim_to_verify_in_jwt(event_loop):
     assert isinstance(result, PluginInService)
     assert isinstance(result.service, ServiceInPluginResponse)
     assert isinstance(result.config, ConfigInPluginResponse)
+
+@pytest.mark.asyncio
+async def test_delete_current_kong_consumer_jwt_using_id(event_loop):
+    global jwt_credentials_id
+    global consumer_ids
+    result = await delete_current_kong_consumer_jwt_using_id(consumer_ids[0],jwt_credentials_id[0])
+    assert result is True
+
+@pytest.mark.asyncio
+async def test_delete_current_kong_consumer_jwt_using_username(event_loop):
+    global jwt_credentials_id
+    global consumer_usernames
+    result = await delete_current_kong_consumer_jwt_using_username(consumer_usernames[1],jwt_credentials_id[1])
+    assert result is True
+
+@pytest.mark.asyncio
+async def test_delete_all_kong_consumer_jwt_using_id(event_loop):
+    global jwt_credentials_id
+    global consumer_ids
+    await create_jwt_credential_for_consumer_using_id(consumer_ids[0])
+    result = await delete_all_kong_consumer_jwt_using_id(consumer_ids[0])
+    assert result is True
+
+@pytest.mark.asyncio
+async def test_delete_all_kong_consumer_jwt_using_username(event_loop):
+    global jwt_credentials_id
+    global consumer_usernames
+    await create_jwt_credential_for_consumer_using_username(consumer_usernames[1])
+    result = await delete_all_kong_consumer_jwt_using_username(consumer_usernames[1])
+    assert result is True
+
+@pytest.mark.asyncio
+async def test_delete_kong_consumer_using_id(event_loop):
+    global consumer_ids
+    result = await delete_kong_consumer_using_id(consumer_ids[0])
+    assert result is True
+
+@pytest.mark.asyncio
+async def test_delete_kong_consumer_using_username(event_loop):
+    global consumer_usernames
+    result = await delete_kong_consumer_using_username(consumer_usernames[1])
+    assert result is True
+
+@pytest.mark.asyncio
+async def test_delete_route_from_kong_using_id_or_name(event_loop):
+    route_name = "kong-fastapi-example-route"
+    result = await delete_route_from_kong_using_id_or_name(route_name)
+    assert result is True
+    
+@pytest.mark.asyncio
+async def test_delete_route_from_kong_associated_to_specific_service(event_loop):
+    route_to_be_created: CreateRouteForServiceInKong = CreateRouteForServiceInKong(route_name="kong-fastapi-example-route", service_name="fastapi-app", paths=["/kong-fastapi-example"])
+    route = await create_route_to_fastapi_app_service_in_kong(route_to_be_created)
+    service = "fastapi-app"
+    result = await delete_route_from_kong_associated_to_specific_service(route.id, service)
+    assert result is True
+
+@pytest.mark.asyncio
+async def test_delete_fastapi_app_service_from_kong_using_service_name(event_loop):
+    service = "fastapi-app"
+    result = await delete_fastapi_app_service_from_kong_using_service_name(service)
+    assert result is True
+
+@pytest.mark.asyncio
+async def test_delete_fastapi_app_service_from_kong_using_service_id(event_loop):
+    service: ServiceInKong = await create_fastapi_app_service_in_kong(CreateServiceInKong(service_name="fastapi-app", service_url="http://fastapi-app:80/kong-fastapi-example"))
+    result = await delete_fastapi_app_service_from_kong_using_id(service.id)
+    assert result is True

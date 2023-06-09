@@ -4,24 +4,23 @@ from app.models.kong_plugin import KongPlugin, KongPluginAttributes, PluginInSer
 
 
 async def add_jwt_plugin_to_service_in_kong(kong_plugin_and_service: KongPlugin):
-    """Function that add jwt pluging to selected service
+    """
+    Asynchronous function to add JWT (JSON Web Token) plugin to a service within Kong.
+
+    The function sends a POST request to the Kong API to add the plugin to the service according to the provided data.
+    On success, it returns the created plugin as a `PluginInService` object.
+    In case of an HTTP response error or request issues, it raises an `HTTPException`.
 
     Args:
-        kong_plugin_and_service (KongPlugin)): KongPlugin is class that contains plugin name and service id or name
+        kong_plugin_and_service (KongPlugin): Object containing Kong plugin name and service name or id.
 
     Returns:
-        json if success, raise HTTPException if fail.
+        PluginInService: Object representing the newly created plugin in the service.
 
     Raises:
-        HTTPException: 500 if fail.
-        
-    Example:
-        >>> add_jwt_plugin_to_service_in_kong(KongPlugin(plugin_name="jwt", service_name_or_id="test"))
-        json
-        
+        HTTPException: If the HTTP request returns an error code or there is an issue while attempting to communicate with the Kong API.
     """
     try:
-
         plugin_data = {
             KongPluginAttributes.plugin_name.value: kong_plugin_and_service.plugin_name,
         } 

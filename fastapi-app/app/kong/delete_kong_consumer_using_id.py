@@ -2,21 +2,20 @@ import httpx
 from fastapi import HTTPException
 
 async def delete_kong_consumer_using_id(kong_consumer_id_to_be_deleted: str):
-    """Function to delete a kong consumer
+    """
+    Asynchronous function to delete a Kong consumer using the consumer's id.
+
+    The function sends a DELETE request to the Kong API to remove the specified consumer.
+    If successful, it returns True. In case of an HTTP response error or request issues, it raises an `HTTPException`.
 
     Args:
-        kong_consumer_id_to_be_deleted (str): The id of the kong consumer to be deleted
-    
-    Raises:
-        HTTPException: 500 If the delete request fails
+        kong_consumer_id_to_be_deleted (str): Identifier of the Kong consumer to be deleted.
 
     Returns:
-        bool: True if the delete request succeeds. 
-    
-    Examples:
-        >>> delete_kong_consumer_using_id("4f596ce5-f799-4bc7-9c54-cfc90c3eff42")
-        True
+        bool: True if the operation was successful and the consumer was deleted, False otherwise.
 
+    Raises:
+        HTTPException: If the HTTP request returns an error code or there is an issue while attempting to communicate with the Kong API.
     """
     try:
         async with httpx.AsyncClient() as client:

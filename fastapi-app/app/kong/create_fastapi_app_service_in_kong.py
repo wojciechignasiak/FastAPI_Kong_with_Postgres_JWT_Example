@@ -3,23 +3,21 @@ from fastapi import HTTPException
 from app.models.kong_service import CreateServiceInKong, ServiceInKongAttributes, ServiceInKong
 
 async def create_fastapi_app_service_in_kong(service: CreateServiceInKong):
-    """Function that adds fastapi-app service to kong.
+    """
+    Asynchronous function to create a FastAPI application service within Kong.
 
+    The function sends a POST request to the Kong API to create the service according to the provided data.
+    On success, it returns the created service as a `ServiceInKong` object.
+    In case of an HTTP response error or request issues, it raises an `HTTPException`.
 
     Args:
-        service (CreateServiceInKong): The service to be created.
+        service (CreateServiceInKong): Object containing the service name and service URL for the new service.
 
     Returns:
-        ServiceInKong class: If the service was created.
-
+        ServiceInKong: Object representing the newly created service in Kong.
 
     Raises:
-        HTTPException: 500 if fail.
-        
-    Example:
-        >>> create_fastapi_app_service_in_kong(CreateServiceInKong(service_name="fastapi-app", service_url="http://fastapi-app:80/kong-fastapi-example"))
-        json
-
+        HTTPException: If the HTTP request returns an error code or there is an issue while attempting to communicate with the Kong API.
     """
     try:
         service_data = {

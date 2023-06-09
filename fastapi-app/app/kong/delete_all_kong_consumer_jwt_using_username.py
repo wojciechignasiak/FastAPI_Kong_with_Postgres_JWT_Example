@@ -4,21 +4,23 @@ from app.models.kong_jwt import KongJWTCredentials
 
 
 
-async def delete_all_kong_consumer_jwt_using_username(kong_consumer_username: str): 
-    """Function to delete all jwts of a kong consumer
+async def delete_all_kong_consumer_jwt_using_username(kong_consumer_username: str):
+    """
+    Asynchronous function to delete all JWT (JSON Web Token) credentials for a Kong consumer using its username.
+
+    The function sends a GET request to the Kong API to retrieve all JWT credentials for the specified consumer.
+    Then, it sends DELETE requests to remove each retrieved JWT credential.
+    If successful, it returns True. If no JWT credentials were found or deleted, it returns False.
+    In case of an HTTP response error or request issues, it raises an `HTTPException`.
 
     Args:
-        kong_consumer_username (str): The username of the kong consumer to delete jwts
-
-    Raises:
-        HTTPException: 500 if the request to kong fails
+        kong_consumer_username (str): Username of the Kong consumer for which the JWT credentials are to be deleted.
 
     Returns:
-        bool: True if the request to kong was successful, False if not. 
-        If the request to kong was successful, the function will delete all jwts of the kong consumer. 
-        If the request to kong was not successful, the function will return False. 
-        If the request to kong was successful, but the kong consumer has no jwts, the function will return True. 
-        If the request to kong was successful, but the kong consumer has jwts, the function will delete all jwts of the kong consumer. 
+        bool: True if the operation was successful and JWT credentials were deleted, False otherwise.
+
+    Raises:
+        HTTPException: If there is an issue while attempting to communicate with the Kong API.
     """
     try:
         async with httpx.AsyncClient() as client:
